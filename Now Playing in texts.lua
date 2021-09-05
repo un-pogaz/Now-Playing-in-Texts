@@ -12,6 +12,7 @@ np_title.txt = Contains just the Title.
 np_artist_title.txt = Contains the name of Artist and the Title in one line.
 np_radio.txt = Contains the currently played music. Ideal if you listen a web radio.
               (If you not listen a web radio, identical to np_title.txt)
+np_uri.txt = Contains the file location in URI format.
 
 The TXT's will be saved in the VLC user director which can be found in the following places
     Linux: ~/.local/share/vlc/
@@ -40,7 +41,7 @@ Mac OS X:
 
 function descriptor()
   return { title = "Now Playing in texts",
-    version = "1.4",
+    version = "1.5",
     author = "un_pogaz",
     shortdesc = "Now Playing in texts",
     description = "Outputs the Title, Album and Artist of the currently playing song to a texts files.",
@@ -70,8 +71,7 @@ end
 function meta_changed()
   vlc.msg.dbg("[Now Playing texts] meta changed")
   update_files()
-end
-
+end 
 
 function update_files()
   if vlc.input.is_playing() then
@@ -81,7 +81,7 @@ function update_files()
     artist_title()
     genre()
     now_playing_radio()
-    files()
+    get_uri()
   else
     clear_file()
   end
@@ -163,14 +163,14 @@ function now_playing_radio()
   io.close()
 end
 
--- Files
-function files()
+-- uri
+function get_uri()
   local item=vlc.item or vlc.input.item()
-  io.output(vlc.config.userdatadir() .. "/np_radio.txt")
-  if item:metas()["now_playing"] then
-    io.write(item:metas()["now_playing"])
+  io.output(vlc.config.userdatadir() .. "/np_uri.txt")
+  if item:uri() then
+    io.write(item:uri())
   else
-    io.write(item:name())
+    io.write(" ")
   end
   io.close()
 end
@@ -189,6 +189,8 @@ function clear_file()
   io.output(vlc.config.userdatadir() .. "/np_genre.txt")
     io.write(" ")
   io.output(vlc.config.userdatadir() .. "/np_radio.txt")
+    io.write(" ")
+  io.output(vlc.config.userdatadir() .. "/np_uri.txt")
     io.write(" ")
   io.close()
 end
