@@ -1,6 +1,6 @@
 function descriptor()
   return { title = "Now Playing in texts v2",
-    version = "2.1",
+    version = "2.0",
     author = "un_pogaz",
     url = "",
     description = [[
@@ -220,14 +220,7 @@ function get_metadata()
   for k, v in pairs(path) do
     local uri = rslt[k]
     if uri then
-      local status, url = pcall(vlc.strings.url_parse, uri)
-      if not status then
-        status, url = pcall(vlc.net.url_parse, uri)
-      end
-      if not status then
-        url = {}
-      end
-      
+      local url = vlc.strings.url_parse(uri)
       if url["protocol"] == "file" then
         uri = vlc.strings.decode_uri(url["path"])
         if string.find(uri, "^/%a:/") then
@@ -455,8 +448,9 @@ function get_custom_files()
   end
 end
 function get_custom_patterns(name)
+  local rslt = {}
   
-  local status, rslt = pcall(function()
+  local co = coroutine.create(function()
     local lst = {}
     for line in io.lines(get_filename(name)) do
       table.insert(lst, line)
@@ -464,7 +458,10 @@ function get_custom_patterns(name)
     return lst
   end)
   
-  if not status or table.getn(rslt) == 0 then
+  local ending
+  ending, rslt = coroutine.resume(co)
+  
+  if not ending or table.getn(rslt) == 0 then
     return name .. "_out", nil
   else
     return name .. "_out", rslt
