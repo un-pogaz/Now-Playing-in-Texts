@@ -41,7 +41,7 @@ Mac OS X:
 
 function descriptor()
   return { title = "Now Playing in texts",
-    version = "1.5",
+    version = "1.6",
     author = "un_pogaz",
     shortdesc = "Now Playing in texts",
     description = "Outputs the Title, Album and Artist of the currently playing song to a texts files.",
@@ -134,7 +134,11 @@ function artist_title()
      io.write(item:metas()["title"])
     end
   else
-    io.write(item:name())
+    local file = item:name();
+    local xedni = string.find(string.reverse(file), "\.");
+    local index = string.len(file) - xedni;
+    local filename = string.sub(file, 0, index);
+    io.write(filename)
   end
   io.close()
 end
