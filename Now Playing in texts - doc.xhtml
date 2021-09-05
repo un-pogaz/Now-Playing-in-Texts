@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Now Playing in texts - doc</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<style type="text/css">
+html {
+  background-color: grey;
+  padding: 1em 5%;
+}
+body {
+  display: block;
+  background-color: white;
+  color: black;
+  padding: 2em;
+  margin: 1em auto;
+  max-width: 52em;
+  min-height: 20em; 
+}
+
+h1, h2, h3, h4 {
+  display: block;
+  line-height: 1.2;
+  font-weight: bold;
+  text-align: center;
+  margin: 1em 0.75em 0.5em;
+}
+h1 {
+  font-size: 2em;
+}
+h2 {
+  font-size: 1.5em;
+}
+h3 {
+  font-size: 1.25em;
+}
+h4 {
+  font-size: 1em;
+}
+
+p {
+  display: block;
+  line-height: 1.2;
+  text-align: justify;
+  margin: 0.5em 0;
+}
+
+i, em {
+  font-style: italic;
+}
+b, strong {
+  font-weight: bold;
+}
+
+blockquote {
+  display: block;
+  border: 0;
+  border-left: 3px;
+  border-color: green;
+  border-style: solid;
+  margin: 0.5em 0.5em 1em;
+  padding: 0.25em 0.75em 0.25em;
+}
+
+pre, code {
+  font-size: 1.2em;
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+pre {
+  display: block;
+  width: 32em;
+  border: 1px;
+  border-color: grey;
+  border-style: solid;
+  overflow-wrap: normal;
+  hyphens: none;
+  margin: 0.5em 1em 1em;
+  padding: 0.25em;
+}
+</style>
+<style type="text/css">
+h1, h2, h3, h4 {text-align: left; margin-left: 0.75em;}
+.pattern {background-color: lightgray;}
+ul {list-style-type: none; margin: 1em 0; padding-left: 1em}
+li {line-height: 1.2; margin: 0.33em 0;}
+</style>
+</head>
+<body>
+<h1 id="now-playing-in-texts">Now Playing in texts</h1>
+<p>A VLC media player extension (v2 and v3) to save in TXT files the metadata of the music currently playing.<br/>
+Ideal if you want to display the current music on your stream with your streaming software (OBS Studio...).</p>
+<h2 id="installation-instructions">Installation Instructions</h2>
+<p>Place the "Now Playing in texts.lua" file in the corresponding folder and restart VLC or reload plugin extensions.</p>
+<p>Linux:<br/>
+  Current User: <code>~/.local/share/vlc/lua/extensions/</code><br/>
+  All Users: <code>/usr/lib/vlc/lua/extensions/</code></p>
+<p>Windows:<br/>
+  Current User: <code>%APPDATA%\vlc\lua\extensions</code><br/>
+  All Users: <code>%ProgramFiles%\VideoLAN\VLC\lua\extensions\</code></p>
+<p>Mac OS X:<br/>
+  Current User: <code>/Users/%your_name%/Library/Application Support/org.videolan.vlc/lua/extensions/</code><br/>
+  All Users: <code>/Applications/VLC.app/Contents/MacOS/share/lua/extensions/</code></p>
+<h2 id="fonctionnement-et-objectif">Functioning</h2>
+<p><i>Now Playing in texts</i> will read and save in TXTs files the metadata of the music currently playing in VLC, in order to retrieve their contents through another software, for example with OBS Studio to add them in your streaming.</p>
+<p><i>Now Playing in texts</i> will automatically manage a list of default files, but it is also possible to create custom files.</p>
+<p>The TXTs files will be saved in the VLC user director which can be found in the following directory:<br/>
+  Linux: <code>~/.local/share/vlc/</code><br/>
+  Windows: <code>%APPDATA%\vlc\</code><br/>
+  Mac OS X: <code>/Users/%your_name%/Library/Application Support/org.videolan.vlc/</code></p>
+<h2 id="fichiers-de-base">Basic files</h2>
+<p is="http://www.w3.org/1999/xhtml">The 6 basic files are automatically generated and contain the most basic metadata<br/></p>
+<p><code>np_title.txt</code> : contains the title of the music. If the music does not have a title, the file name will be used.</p>
+<p><code>np_artist.txt</code> : contains the artist of the music. If the music has no artist, the file will be empty.</p>
+<p><code>np_album.txt</code> : contains the album of the music. If the music has no album, the file will be empty.</p>
+<p><code>np_artist_title.txt</code> : contains the artist and the title of the music. If the music has no artist or no title, it will behave like <code>np_title.txt</code>.</p>
+<p><code>np_radio.txt</code> : Uses the metadata <b>{now_playing}</b>, otherwise, behaves like <code>np_title.txt</code>. This metadata is sometimes used by web radios, so it is more relevant to use this file if you listen to one.</p>
+<p is="http://www.w3.org/1999/xhtml"><code>np_bandcamp.txt</code> : Uses the Bandcamp metadata pattern which is <b class="pattern">{artist} - {album} - {track_number0} {title}</b> otherwise, behaves like <code>np_artist_title.txt</code>. </p>
+<h2 id="fichiers-speciaux">Special files</h2>
+<p>The 3 special files are automatically generated and contain unique metadata or files useful for debugging.<br/></p>
+<p><code>np_metadata.txt</code> : contains the list of metadata available for the current song.<br/></p>
+<p><code>np_metadata_full.txt</code> : contains a list of all the metadata that can be used in <i>Now Playing in texts</i>, including those empty.</p>
+<p><code>np_artwork.jpg</code> : copy the cover image of the music. If no image is found, a blank/transparent image will be created.<br/></p>
+
+<h2 id="custom-files">Custom files</h2>
+<p><i>Now Playing</i> in texts V2 integrates the possibility of creating its own metadata TXT files with your custom metadata pattern.<br/></p>
+<p>To get the metadata you want, you should create an "input" .TXT file named <code>np_custom.txt</code> which will be analyzed and the requested metadata will be written in an "output" file <code>np_custom_out.txt</code>.<br/>
+It is possible to have several custom files, their names are <code>np_custom.txt</code>,  <code>np_custom1.txt</code>,  <code>np_custom2.txt</code>,  <code>np_custom3.txt</code> … up to <code>np_custom100.txt</code>!</p>
+<p>Each line of the "input" file corresponds to a metadata pattern to retrieve, the whole forms a list of metadata patterns to test and write in the corresponding "output" file.<br/>
+Each one of its patterns is a string containing keywords between braces <b>{ }</b> which will be replaced by the corresponding metadata.<br/>If one of the pattern metadata is missing, <i>Now Playing in texts</i> will move to the next line/pattern until it finds a valid pattern with all available metadata, but if <i>Now Playing in texts</i> gets to the end of the "input" file without finding a single valid pattern, then it will write an empty file.</p>
+<p>Exemple de <code>np_custom4.txt</code> :</p>
+<pre>{artist} - {album} - {title} ({date}) {genre}
+{artist} - {album} - {title}
+{title} -by {artist}</pre>
+<p><i>Now Playing in texts</i> will first try the <b class="pattern">{artist} - {album} - {title} ({date}) {genre}</b> which asks for the artist, album, title, date and genre. The "output" file <code>np_custom4_out.txt</code> will contain the following text:</p>
+<blockquote>
+<p>Ratatat - Classics - Lex (2006) Electro-Instrumental</p>
+</blockquote>
+<p>If the date or genre is missing, <i>Now Playing in texts</i> will go to the next pattern in the list, that is <b class="pattern">{artist} - {album} - {title}</b> which has this result:</p>
+<blockquote>
+<p>Ratatat - Classics - Lex</p>
+</blockquote>
+<p>If the album is missing, it will be the pattern <b class="pattern">{title} -by {artist}</b> which will be tested:</p>
+<blockquote>
+<p>Lex -by Ratatat</p>
+</blockquote>
+<p>If the artist or the title are not present, <i>Now Playing in texts</i> having arrived at the end of the file, it will write an empty "output" file.</p>
+<p><br/></p>
+<p>If one of the tested patterns does not contain a valid keyword, it is written directly to the "output" file.</p>
+<p>Example for <code>np_custom5.txt</code> :</p>
+<pre>{artist} - {album} - {title}
+{artist} - {title}
+404 Not Found : Unknow {type}
+{name} / {filename}</pre>
+<p>In this example, after testing <b class="pattern">{artist} - {album} - {title}</b>, then <b class="pattern">{artist} - {title}</b>, <i>Now Playing in texts</i> will arrive at the 3rd line with the pattern <b class="pattern">Unknow {type}</b>. As this last pattern does not contain any valid keyword, it will be written as is in <code>np_custom5_out.txt</code> and the pattern 4 <b class="pattern">{name} / {filename}</b> ne sera jamais utilisé.</p>
+<blockquote><p>404 Not Found : Unknow {type}</p>
+</blockquote>
+<p><br/></p>
+<p>Il est aussi possible d’avoir des retours a la ligne dans le fichier de "sortie". Pour cela vous devait utiliser le caractère d’échappement "\n" dans le pattern.<br/>
+Par exemple le pattern <b class="pattern">{title}\n{artist}\n{genre}</b> donnera le résultat suivant :</p>
+<blockquote>
+<p>Lex<br/>
+Ratatat<br/>
+Electro-Instrumental</p>
+</blockquote>
+<p><br/></p>
+<p>Note: if an "output" file exists but not its "input" version (e.g. : si <code>np_custom10_out.txt</code> existe but not <code>np_custom10.txt</code>), the "output" file will be deleted.</p>
+<h3 id="metadata-names-for-custom-files">Metadata names for custom files</h3>
+<p>Here is the list of metadata names that can be used in the patterns.</p>
+<ul>
+<li><b>{filename}</b> : Name of the file</li>
+<li><b>{title}</b> : Title</li>
+<li><b>{artist}</b> : Artist</li>
+<li><b>{album}</b> : Album</li>
+<li><b>{track_number}</b> : Track number</li>
+<li><b>{track_number0}</b> : Track number, but with zeros in front of the numbers 1 to 9</li>
+<li><b>{track_total}</b> : Total number of tracks in the album</li>
+<li><b>{track_total0}</b> : Total number of tracks in the album, but with leading zeros for the numbers 1 to 9</li>
+<li><b>{genre}</b> : Genre</li>
+<li><b>{date}</b> : Year</li>
+<li><b>{description}</b> : Description</li>
+<li><b>{discnumber}</b> : Disc number</li>
+<li><b>{discnumber0}</b> : Disc number, but with leading zeros for the numbers 1 to 9</li>
+<li><b>{composer}</b> : Composer</li>
+<li><b>{albumartist}</b> : Artist of the album (often in compilations)</li>
+<li><b>{now_playing}</b> : Used by radios, often corresponds to the title of the music being broadcast</li>
+<li><b>{duration}</b> : Track duration, format h:mm:ss</li>
+<li><b>{duration_1}</b> : Variant of the Duration which can contain negative values</li>
+<li><b>{artwork}</b> : Contains the full path of the cover image used<br/></li>
+<li><b>{artwork_url}</b> : Contains the full path of the cover image used, in URI format</li>
+<li><b>{filepath}</b> : Contains the full path of the file</li>
+<li><b>{uri}</b> :  Contains the full path of the file, in URI format</li>
+</ul>
+<ul>
+<li><b>{name}</b> : Track name, generated by VLC, uses <b>{title}</b>, else <b>{filename}</b> (is therefore rarely empty)</li>
+</ul>
+<p><br/></p>
+<p>Note: VLC does not support some metadata for certain types of audio files, so they cannot be used even if other software tells you that this metadata exists.<br/>
+For example, .OGG and .FLAC files can use the metadata <b>{discnumber}</b>, <b>{composer}</b> and <b>{albumartist}</b>, but not .MP3 files.<br/>
+It is also possible that the metadata is badly read by VLC. Example: if <b>{composer}</b> is written "Composer1\\Composer2" only "Composer2" will be used.</p>
+<h3 id="pattern-not_playing-no-active-music">Pattern {NOT_PLAYING} (no active music)</h3>
+<p>By default, when no music is played in VLC, or if it is closed, the custom files will be empty. It is however possible, thanks to a special pattern, to display a specific text when no music is played by VLC.</p>
+<p>Be careful not to confuse "no music played" (STOP button) with "pausing playback" (PAUSE button). The <b>{NOT_PLAYING}</b> pattern only concerns the first case, in the case of a pause of the current reading, the metadata will not be modified.</p>
+<p>To create a <b>{NOT_PLAYING}</b> pattern, you should add at the end of your custom file a new line starting with the keyword <b>{NOT_PLAYING}</b>. The text following this keyword will be the one written in the output file. Other keywords will not be processed.</p>
+<p>In the following example, the text that will be used is « VLC fait une sieste ».</p>
+<pre>{artist} - {title} | {composer}
+{artist} - {title}
+{title}
+{NOT_PLAYING}VLC fait une sieste</pre>
+<p>If the keyword <b>{NOT_PLAYING}</b> is put at the beginning of another pattern than the one at the last line of the custom file, the line will be ignored. And if the keyword is not at the beginning of the last line, then the line will be considered as a normal pattern and not as a <b>{NOT_PLAYING}</b> pattern. Although it is at the end of the file, the <b>{NOT_PLAYING}</b> pattern will only be used if no music is active and will be ignored from the normal behavior if <i>Now Playing in texts</i> finds no valid pattern and reaches the end of the file.</p>
+<h3 id="patterns-of-Basic-file-examples">Patterns of Basic file (examples)</h3>
+<p>np_title.txt :</p>
+<pre>{title}
+{filename}</pre>
+<p>np_artist.txt :</p>
+<pre>{artist}</pre>
+<p>np_album.txt :
+</p>
+<pre>{album}</pre>
+<p>np_artist_title.txt :</p>
+<pre>{artist} - {title}
+{title}
+{filename}</pre>
+<p>np_radio.txt :</p>
+<pre>{now_playing}
+{title}
+{filename}</pre>
+<p>np_bandcamp.txt :</p>
+<pre>{artist} - {album} - {track_number0} {title}
+{artist} - {album} - {title}
+{artist} - {title}
+{title}
+{filename}</pre>
+</body>
+</html>
