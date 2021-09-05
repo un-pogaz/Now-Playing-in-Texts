@@ -1,0 +1,7 @@
+## gitignore
+## https://git-scm.com/docs/gitignore
+##
+
+--*/
+zz*
+*.lnk
