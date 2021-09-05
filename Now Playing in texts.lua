@@ -10,6 +10,8 @@ np_album.txt = Contains just the Album.
 np_artist.txt = Contains just the Artist.
 np_title.txt = Contains just the Title.
 np_artist_title.txt = Contains the name of Artist and the Title in one line.
+np_radio.txt = Contains the currently played music. Ideal if you listen a web radio.
+              (If you not listen a web radio, identical to np_title.txt)
 
 The TXT's will be saved in the VLC user director which can be found in the following places
     Linux: ~/.local/share/vlc/
@@ -37,11 +39,11 @@ Mac OS X:
 --]]
 
 function descriptor()
-  return { title = "Now Playing in texts" ;
-    version = "1.3" ;
-    author = "un_pogaz" ;
-    shortdesc = "Now Playing in texts";
-    description = "Outputs the Title, Album and Artist of the currently playing song to a texts files." ;
+  return { title = "Now Playing in texts",
+    version = "1.4",
+    author = "un_pogaz",
+    shortdesc = "Now Playing in texts",
+    description = "Outputs the Title, Album and Artist of the currently playing song to a texts files.",
     capabilities = { "input-listener" }
   }
 end
@@ -66,8 +68,10 @@ function input_changed()
   update_files()
 end
 function meta_changed()
+  vlc.msg.dbg("[Now Playing texts] meta changed")
   update_files()
 end
+
 
 function update_files()
   if vlc.input.is_playing() then
@@ -76,6 +80,8 @@ function update_files()
     album()
     artist_title()
     genre()
+    now_playing_radio()
+    files()
   else
     clear_file()
   end
@@ -126,7 +132,7 @@ function artist_title()
       io.write(item:metas()["artist"] .. " - " .. item:metas()["title"])
     else
      io.write(item:metas()["title"])
-  end
+    end
   else
     io.write(item:name())
   end
@@ -145,8 +151,33 @@ function genre()
   io.close()
 end
 
+-- now_playing / radio
+function now_playing_radio()
+  local item=vlc.item or vlc.input.item()
+  io.output(vlc.config.userdatadir() .. "/np_radio.txt")
+  if item:metas()["now_playing"] then
+    io.write(item:metas()["now_playing"])
+  else
+    io.write(item:name())
+  end
+  io.close()
+end
+
+-- Files
+function files()
+  local item=vlc.item or vlc.input.item()
+  io.output(vlc.config.userdatadir() .. "/np_radio.txt")
+  if item:metas()["now_playing"] then
+    io.write(item:metas()["now_playing"])
+  else
+    io.write(item:name())
+  end
+  io.close()
+end
+
 -- Clear files
 function clear_file()
+  vlc.msg.dbg("[Now Playing texts] files clear")
   io.output(vlc.config.userdatadir() .. "/np_title.txt")
     io.write(" ")
   io.output(vlc.config.userdatadir() .. "/np_artist.txt")
@@ -157,8 +188,9 @@ function clear_file()
     io.write(" ")
   io.output(vlc.config.userdatadir() .. "/np_genre.txt")
     io.write(" ")
+  io.output(vlc.config.userdatadir() .. "/np_radio.txt")
+    io.write(" ")
   io.close()
-  vlc.msg.dbg("[Now Playing texts] files clear")
 end
 
 function hide_dialog()
