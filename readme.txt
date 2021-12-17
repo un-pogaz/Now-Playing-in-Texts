@@ -43,3 +43,8 @@ All Users: %ProgramFiles%\VideoLAN\VLC\lua\extensions\
 Mac OS X:
 Current User: /Users/%your_name%/Library/Application Support/org.videolan.vlc/lua/extensions/
 All Users: /Applications/VLC.app/Contents/MacOS/share/lua/extensions/
+
+=============
+IMPORTANT
+"Now Playing in texts" V2 is compatible with VLC 3 only.
+If you absolutely must use VLC v2, only "Now Playing in texts" v1.5 and below are compatible. Go to "Files" tab on this page, click on "3 files ( 24 archived )" and select the old version of your choice.
