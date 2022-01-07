@@ -46,7 +46,9 @@ p {
   text-align: justify;
   margin: 0.5em 0;
 }
-
+.left {
+  text-align: left;
+}
 i, em {
   font-style: italic;
 }
@@ -89,23 +91,23 @@ li {line-height: 1.2; margin: 0.33em 0;}
 </style>
 </head>
 <body>
-<h1 id="now-playing-in-texts">Now Playing in texts</h1>
+<h1 id="now-playing-in-texts">Now Playing in Texts</h1>
 <p>Une extension VLC media player (v2 et v3) pour sauvegarder dans des fichiers TXTs les métadonnées de la musique actuellement jouer.<br/>
 Idéal si vous souhaitez afficher la musique en cours sur votre flux dans votre logiciel de streaming (OBS Studio...).</p>
 <h2 id="installation-instructions">Installation Instructions</h2>
-<p>Placez le fichier "Now Playing in texts.lua" dans le dossier correspondant et redémarrez VLC ou rechargez les extensions des plugins.</p>
-<p>Linux:<br/>
+<p>Placez le fichier "Now Playing in Texts.lua" dans le dossier correspondant et redémarrez VLC ou rechargez les extensions des plugins.</p>
+<p class="left">Linux:<br/>
   Current User: <code>~/.local/share/vlc/lua/extensions/</code><br/>
   All Users: <code>/usr/lib/vlc/lua/extensions/</code></p>
-<p>Windows:<br/>
+<p class="left">Windows:<br/>
   Current User: <code>%APPDATA%\vlc\lua\extensions</code><br/>
   All Users: <code>%ProgramFiles%\VideoLAN\VLC\lua\extensions\</code></p>
-<p>Mac OS X:<br/>
+<p class="left">Mac OS X:<br/>
   Current User: <code>/Users/%your_name%/Library/Application Support/org.videolan.vlc/lua/extensions/</code><br/>
   All Users: <code>/Applications/VLC.app/Contents/MacOS/share/lua/extensions/</code></p>
 <p is="http://www.w3.org/1999/xhtml" id="fonctionnement-et-objectif">Fonctionnement</p>
-<p><i>Now Playing in texts</i> lit et sauvegardera dans des fichiers TXTs les métadonnées de la musique actuellement jouer dans VLC, dans l’objectif de récupérer leurs contenus via un autre logiciel, par exemple avec OBS Studio pour les ajoutés dans votre flux de streaming.</p>
-<p><i>Now Playing in texts</i> gérera automatique une liste de fichiers par défaut, mais il est aussi possible de créés des fichiers personnaliser.</p>
+<p><i>Now Playing in Texts</i> lit et sauvegardera dans des fichiers TXTs les métadonnées de la musique actuellement jouer dans VLC, dans l’objectif de récupérer leurs contenus via un autre logiciel, par exemple avec OBS Studio pour les ajoutés dans votre flux de streaming.</p>
+<p><i>Now Playing in Texts</i> gérera automatique une liste de fichiers par défaut, mais il est aussi possible de créés des fichiers personnaliser.</p>
 <p>Les fichiers TXTs seront enregistrés dans le répertoire de l'utilisateur VLC qui se trouve dans les dossiers suivant :<br/>
   Linux: <code>~/.local/share/vlc/</code><br/>
   Windows: <code>%APPDATA%\vlc\</code><br/>
@@ -121,25 +123,25 @@ Idéal si vous souhaitez afficher la musique en cours sur votre flux dans votre 
 <h2 id="fichiers-speciaux">Fichiers spéciaux</h2>
 <p>Les 3 fichiers spéciaux sont générés automatiquement et contienne des métadonnées uniques ou des fichiers utile au débogage.<br/></p>
 <p><code>np_metadata.txt</code> : contiens la liste des métadonnées disponible pour le morceau actuel.<br/></p>
-<p><code>np_metadata_full.txt</code> : contiens la liste de toutes les métadonnées utilisable dans <i>Now Playing in texts</i>, y compris les vides.</p>
+<p><code>np_metadata_full.txt</code> : contiens la liste de toutes les métadonnées utilisable dans <i>Now Playing in Texts</i>, y compris les vides.</p>
 <p><code>np_artwork.jpg</code> : copier de l’image de couverture de la musique. Si aucune image n’est trouvée, une image vide/transparent sera crée.<br/></p>
 
 <h2 id="fichiers-personnaliser">Fichiers personnaliser</h2>
-<p><i>Now Playing in texts V2</i> intègre la possibilité des créés ses propres fichiers TXTs de métadonnées avec des patterns personnalisés.</p>
+<p><i>Now Playing in Texts V2</i> intègre la possibilité des créés ses propres fichiers TXTs de métadonnées avec des patterns personnalisés.</p>
 <p>Pour obtenir les métadonnées que vous souhaiter, vous devrait créer un fichier .TXT "d’entrée" nommée <code>np_custom.txt</code> qui sera analysé et les métadonnées demandées seront écrites dans un fichier de "sortie" <code>np_custom_out.txt</code>.<br/>
 Il est possible d’avoirs plusieurs fichiers personnaliser, leurs noms sont <code>np_custom.txt</code>,  <code>np_custom1.txt</code>,  <code>np_custom2.txt</code>,  <code>np_custom3.txt</code> … jusqu’à <code>np_custom100.txt</code> !</p>
 <p>Chaque ligne du fichier "d’entrée" correspond a un pattern de métadonnée a récupéré, l’ensemble forme une liste de pattern de métadonnée a testé et a écrire dans le fichier de "sortie" correspondant.<br/>
 Chaque un de ses patterns est une chaîne de caractère contenant des mots-clés entre accolade <b>{ }</b> qui seront remplacé par la métadonnée correspondante.<br/>
-Si une des métadonnées du pattern est manquant, <i>Now Playing in texts</i> passera a la ligne/pattern suivante et cela jusqu’à trouver un pattern valide avec toutes les métadonnées disponibles, mais si <i>Now Playing in texts</i> arrive a la fin du fichier "d’entrée" sans trouver un seul pattern valide, alors il écrira un fichier vide.</p>
+Si une des métadonnées du pattern est manquant, <i>Now Playing in Texts</i> passera a la ligne/pattern suivante et cela jusqu’à trouver un pattern valide avec toutes les métadonnées disponibles, mais si <i>Now Playing Tn texts</i> arrive a la fin du fichier "d’entrée" sans trouver un seul pattern valide, alors il écrira un fichier vide.</p>
 <p>Exemple de <code>np_custom4.txt</code> :</p>
 <pre>{artist} - {album} - {title} ({date}) {genre}
 {artist} - {album} - {title}
 {title} -by {artist}</pre>
-<p><i>Now Playing in texts</i> tentera en premier le pattern <b class="pattern">{artist} - {album} - {title} ({date}) {genre}</b> qui demande l’artiste, l’album, le titre, la date et le genre. Le fichier de "sortie" <code>np_custom4_out.txt</code> contiendra le texte suivant :</p>
+<p><i>Now Playing in Texts</i> tentera en premier le pattern <b class="pattern">{artist} - {album} - {title} ({date}) {genre}</b> qui demande l’artiste, l’album, le titre, la date et le genre. Le fichier de "sortie" <code>np_custom4_out.txt</code> contiendra le texte suivant :</p>
 <blockquote>
 <p>Ratatat - Classics - Lex (2006) Electro-Instrumental</p>
 </blockquote>
-<p>Si la la date ou le genre sont manquants, <i>Now Playing in texts</i> passera au pattern suivant dans la liste, soit <b class="pattern">{artist} - {album} - {title}</b> qui a ce résultat :</p>
+<p>Si la la date ou le genre sont manquants, <i>Now Playing in Texts</i> passera au pattern suivant dans la liste, soit <b class="pattern">{artist} - {album} - {title}</b> qui a ce résultat :</p>
 <blockquote>
 <p>Ratatat - Classics - Lex</p>
 </blockquote>
@@ -147,7 +149,7 @@ Si une des métadonnées du pattern est manquant, <i>Now Playing in texts</i> pa
 <blockquote>
 <p>Lex -by Ratatat</p>
 </blockquote>
-<p>Si l’artiste ou le titre ne sont pas présents, <i>Now Playing in texts</i> étant arrivé a la fin du fichier, il écrira un fichier de "sortie" vide.</p>
+<p>Si l’artiste ou le titre ne sont pas présents, <i>Now Playing in Texts</i> étant arrivé a la fin du fichier, il écrira un fichier de "sortie" vide.</p>
 <p><br/></p>
 <p>Si un des patterns testé ne contient aucun mot-clé valide, celui-ci est directement écrit dans le fichier de "sortie".</p>
 <p>Exemple pour <code>np_custom5.txt</code> :</p>
@@ -155,7 +157,7 @@ Si une des métadonnées du pattern est manquant, <i>Now Playing in texts</i> pa
 {artist} - {title}
 404 Not Found : Unknow {type}
 {name} / {filename}</pre>
-<p>Dans cet exemple, après avoir testé <b class="pattern">{artist} - {album} - {title}</b> puis <b class="pattern">{artist} - {title}</b>, <i>Now Playing in texts</i> arrivera a la 3<sup>eme</sup> ligne avec le pattern <b class="pattern">Unknow {type}</b>. Comme ce dernier pattern ne contient aucun mot-clé valide, il sera donc écrit telle quel dans <code>np_custom5_out.txt</code> et le pattern 4 <b class="pattern">{name} / {filename}</b> ne sera jamais utilisé.</p>
+<p>Dans cet exemple, après avoir testé <b class="pattern">{artist} - {album} - {title}</b> puis <b class="pattern">{artist} - {title}</b>, <i>Now Playing in Texts</i> arrivera a la 3<sup>eme</sup> ligne avec le pattern <b class="pattern">Unknow {type}</b>. Comme ce dernier pattern ne contient aucun mot-clé valide, il sera donc écrit telle quel dans <code>np_custom5_out.txt</code> et le pattern 4 <b class="pattern">{name} / {filename}</b> ne sera jamais utilisé.</p>
 <blockquote><p>404 Not Found : Unknow {type}</p>
 </blockquote>
 <p><br/></p>
@@ -214,7 +216,7 @@ Le pattern <b>{NOT_PLAYING}</b> ne concerne que le premier cas, dans le cas d’
 {artist} - {title}
 {title}
 {NOT_PLAYING}VLC fait une sieste</pre>
-<p>Si le mot-clé <b>{NOT_PLAYING}</b> est mit au début d’un autre pattern que celui a la dernière ligne du fichier personnaliser, la ligne sera ignorée. Et si le mot-clé n’est pas au début de la dernière ligne, alors la ligne sera considérée comme un pattern normal et non comme un pattern <b>{NOT_PLAYING}</b>. Bien qu’il soit à la fin du fichier, le pattern <b>{NOT_PLAYING}</b> ne sera utilisé uniquement que si aucune musique n’est active et sera ignorée du comportement normal si <i>Now Playing in texts</i> ne trouve aucun pattern valide et arrive a la fin du fichier.</p>
+<p>Si le mot-clé <b>{NOT_PLAYING}</b> est mit au début d’un autre pattern que celui a la dernière ligne du fichier personnaliser, la ligne sera ignorée. Et si le mot-clé n’est pas au début de la dernière ligne, alors la ligne sera considérée comme un pattern normal et non comme un pattern <b>{NOT_PLAYING}</b>. Bien qu’il soit à la fin du fichier, le pattern <b>{NOT_PLAYING}</b> ne sera utilisé uniquement que si aucune musique n’est active et sera ignorée du comportement normal si <i>Now Playing in Texts</i> ne trouve aucun pattern valide et arrive a la fin du fichier.</p>
 <h3 id="patterns-des-fichiers-de-base-exemples">Patterns des fichiers de base (exemples)</h3>
 <p>np_title.txt :</p>
 <pre>{title}
