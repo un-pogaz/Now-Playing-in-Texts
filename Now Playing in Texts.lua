@@ -1,8 +1,8 @@
 function descriptor()
-  return { title = "Now Playing in texts v2",
+  return { title = "Now Playing in Texts v2",
     version = "2.1",
     author = "un_pogaz",
-    url = "https://github.com/un-pogaz/Now-Playing-in-texts",
+    url = "https://github.com/un-pogaz/Now-Playing-in-Texts",
     description = [[Write the metadatas of the curent playing song in texts files.
 You can create customs outputs files, read the doc for more detailed information.
 
@@ -10,14 +10,14 @@ The TXT's will be saved in your VLC user director which can be found in the foll
   Linux: ~/.local/share/vlc/
   Windows: %APPDATA%\vlc\
   Mac OS X: /Users/%your_name%/Library/Application Support/org.videolan.vlc/]],
---  shortdesc = "Now Playing in texts",
+--  shortdesc = "Now Playing in Texts",
     capabilities = { "input-listener" },
     icon = NP_icon
   }
 end
 
 --[[
-Now Playing in texts, extension for VLC media player
+Now Playing in Texts, extension for VLC media player
 
 -------------------------
 Installation Instructions

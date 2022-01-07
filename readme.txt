@@ -15,11 +15,11 @@ Special files
 The 3 special files are automatically generated and contain unique metadata or files useful for debugging.
 
 np_metadata.txt = contains the list of metadata available for the current song.
-np_metadata_full.txt = contains a list of all the metadata that can be used in Now Playing in texts, including those empty.
+np_metadata_full.txt = contains a list of all the metadata that can be used in Now Playing in Texts, including those empty.
 np_artwork.jpg = copy the cover image of the music. If no image is found, a blank/transparent image will be created.
 
 Custom files
-Now Playing in texts V2 integrates the possibility of creating its own metadata TXT files with your custom metadata pattern.
+Now Playing in Texts V2 integrates the possibility of creating its own metadata TXT files with your custom metadata pattern.
 Read the HTML doc for more detail.
 
 The TXTs files will be saved in the VLC user director which can be found in the following directory:
@@ -30,7 +30,7 @@ Mac OS X: /Users/%your_name%/Library/Application Support/org.videolan.vlc/
 -------------------------
 Installation Instructions
 
-Place the "Now Playing in texts.lua" file in the corresponding folder and restart VLC or reload plugin extensions.
+Place the "Now Playing in Texts.lua" file in the corresponding folder and restart VLC or reload plugin extensions.
 
 Linux:
 Current User: ~/.local/share/vlc/lua/extensions/
@@ -46,5 +46,5 @@ All Users: /Applications/VLC.app/Contents/MacOS/share/lua/extensions/
 
 =============
 IMPORTANT
-"Now Playing in texts" V2 is compatible with VLC 3 only.
-If you absolutely must use VLC v2, only "Now Playing in texts" v1.5 and below are compatible. Go to "Files" tab on this page, click on "3 files ( 24 archived )" and select the old version of your choice.
+"Now Playing in Texts" V2 is compatible with VLC 3 only.
+If you absolutely must use VLC v2, only "Now Playing in Texts" v1.5 and below are compatible. Go to "Files" tab on this page, click on "3 files ( 24 archived )" and select the old version of your choice.
