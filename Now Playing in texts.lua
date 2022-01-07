@@ -2,16 +2,14 @@ function descriptor()
   return { title = "Now Playing in texts v2",
     version = "2.1",
     author = "un_pogaz",
-    url = "",
-    description = [[
-Write the metadatas of the curent playing song in texts files.
+    url = "https://github.com/un-pogaz/Now-Playing-in-texts",
+    description = [[Write the metadatas of the curent playing song in texts files.
 You can create customs outputs files, read the doc for more detailed information.
 
 The TXT's will be saved in your VLC user director which can be found in the following places
   Linux: ~/.local/share/vlc/
   Windows: %APPDATA%\vlc\
-  Mac OS X: /Users/%your_name%/Library/Application Support/org.videolan.vlc/
-]],
+  Mac OS X: /Users/%your_name%/Library/Application Support/org.videolan.vlc/]],
 --  shortdesc = "Now Playing in texts",
     capabilities = { "input-listener" },
     icon = NP_icon
@@ -44,17 +42,17 @@ Mac OS X:
 
 -- Activate & Deactivate
 function activate()
-  vlc.msg.dbg("[Now Playing texts] Activate")
+  print_debug("Activate")
   init()
   update_files()
 end
 function close()
   clear_files()
-  vlc.msg.dbg("[Now Playing texts] Close")
+  print_debug("Close")
 end
 function deactivate()
   clear_files()
-  vlc.msg.dbg("[Now Playing texts] Deactivate")
+  print_debug("Deactivate")
 end
 
 -- Triggers
@@ -73,6 +71,8 @@ names = { "filename", "title", "artist", "album",
     "COMPOSER", "ALBUMARTIST",
     "now_playing",
     "name", "duration", "duration_1" }
+    
+names_custom = { "ext", "ext1" } -- custom names
 
 names0 = { "track_number", "track_total", "DISCNUMBER" } -- this names exist wiht a 0 variante
 
@@ -86,8 +86,11 @@ is_playing = "is_playing_bool"
 
 -- initialisation
 function init()
-  vlc.msg.dbg("[Now Playing texts] init()")
+  print_debug("init()")
   
+  for i, n in pairs(names_custom) do
+    table.insert(names, n)
+  end
   for i, n in pairs(names0) do
     table.insert(names, n)
     table.insert(names, n .. "0")
@@ -116,12 +119,12 @@ end
 -- update files
 
 function update_files()
-  vlc.msg.dbg("[Now Playing texts] update_files()")
+  print_debug("update_files()")
   metadata = get_metadata()
   write_all_files()
 end
 function clear_files()
-  vlc.msg.dbg("[Now Playing texts] clear_files()")
+  print_debug("clear_files()")
   metadata[is_playing] = false
   write_all_files()
 end
@@ -173,6 +176,7 @@ function get_metadata()
   local t_m = 0
   local t_h = 0
   
+  -- set duration
   if t_s then
     t_s = truncate(t_s)
     if t_s > 0 then
@@ -229,27 +233,36 @@ function get_metadata()
       end
       
       if url["protocol"] == "file" then
-        uri = vlc.strings.decode_uri(url["path"])
-        if string.find(uri, "^/%a:/") then
-          uri = string.sub(uri, 2)
+        local file = url["path"]
+        if not file then
+          file = string.sub(uri, 8)
         end
-        rslt[v] = uri;
+        file = vlc.strings.decode_uri(file)
+        if string.find(file, "^/%a:/") then
+          file = string.sub(file, 2)
+        end
+        rslt[v] = file;
       end
     end
   end
   
+  
+  -- custom names
+  -- set ext
+  if rslt["filename"] then
+    local ext = string.reverse(rslt["filename"])
+    local zi = string.find(ext, "\.", 1, true)
+    if zi and zi > 1 then
+      ext = string.reverse(string.sub(ext, 1, zi))
+      rslt["ext"] = string.upper(ext)
+      rslt["ext1"] = string.lower(ext)
+    end
+  end
+  
   -- trim white space
-  local s, e
   for k, v in pairs(rslt) do
     if type(v) == type("") then
-      s, e = string.find(v, "^%s+")
-      if e then
-        v = string.sub(v, e+1)
-      end
-      s, e = string.find(v, "%s+$")
-      if s then
-        v = string.sub(v, 1, s-1)
-      end
+      v = string_trim(v)
       if v == "" then
         v = nil
       end
@@ -264,14 +277,14 @@ end
 -- output files
 
 function write_pattern(name, patterns)
-  vlc.msg.dbg("[Now Playing texts] write file > " .. name)
+  print_debug("write file > " .. name)
   
   if not metadata[is_playing] then
     local is_playing_line = get_not_playing(patterns[table.getn(patterns)])
     if is_playing_line then
-      vlc.msg.dbg("[Now Playing texts] not playing > " .. is_playing_line)
+      print_debug("not playing > " .. is_playing_line)
     else
-      vlc.msg.dbg("[Now Playing texts] not playing <empty file>")
+      print_debug("not playing <empty file>")
       is_playing_line = ""
     end
     write_file(name, is_playing_line)
@@ -290,7 +303,7 @@ function write_pattern(name, patterns)
       
       if used_name_lenght == 0 then
         -- if no valide name, write the text
-        vlc.msg.dbg("[Now Playing texts] pattern > " .. ptr)
+        print_debug("pattern > " .. ptr)
         write_file(name, ptr)
         return
         
@@ -305,10 +318,10 @@ function write_pattern(name, patterns)
           -- next pattern
         else
           
-          vlc.msg.dbg("[Now Playing texts] pattern > " .. ptr)
+          print_debug("pattern > " .. ptr)
           local index_name = get_index_name(ptr, used_name)
           local rslt = {}
-          for i, rev in reverse(index_name) do
+          for i, rev in table_reverse(index_name) do
             --exctract the end of the patern for replace only the last one metadata
             local fin = string.sub(ptr, rev[1])
             rslt[i+1] = valide_meta[rev[2]] .. string.sub(fin, string.len(k_w(rev[2]))+1)
@@ -323,7 +336,7 @@ function write_pattern(name, patterns)
     end
   end
   
-  vlc.msg.dbg("[Now Playing texts] no matching pattern <empty file>")
+  print_debug("no matching pattern <empty file>")
   write_file(name, "")
   return
 end
@@ -351,9 +364,9 @@ function write_metadata()
     table.insert(mdt2, not_playing)
   end
   
-  vlc.msg.dbg("[Now Playing texts] write file > metadata")
+  print_debug("write file > metadata")
   write_file("metadata", table.concat(mdt1, "\n"))
-  vlc.msg.dbg("[Now Playing texts] write file > metadata_full")
+  print_debug("write file > metadata_full")
   write_file("metadata_full", table.concat(mdt2, "\n"))
 end
 
@@ -363,7 +376,7 @@ function write_artwork()
   if metadata[is_playing] and src then
     local fi_r = io.open(src, "rb")
     if fi_r then
-      vlc.msg.dbg("[Now Playing texts] write artwork > np_artwork.jpg")
+      print_debug("write artwork > np_artwork.jpg")
       local fi_w = io.open(artwork, "wb")
       local nr = 2^16
       local bytes = fi_r:read(nr)
@@ -378,7 +391,7 @@ function write_artwork()
     end
   end
   
-  vlc.msg.dbg("[Now Playing texts] no artwork <empty artwork>")
+  print_debug("no artwork <empty artwork>")
   local fi_w = io.open(artwork, "wb")
   fi_w:write(NP_transparent)
   fi_w:close()
@@ -390,12 +403,17 @@ function debug_metadata(metas)
     table.insert(rslt, k.."=")
     table.insert(rslt, "\t"..v)
   end
-  vlc.msg.dbg("[Now Playing texts] write file > debug_metadata")
+  print_debug("write file > debug_metadata")
   write_file("debug_metadata", table.concat(rslt, "\n"))
 end
 
 -------------------
 -- various function
+
+function k_w(word)
+  word = get_value_empty(word)
+  return "{".. string.lower(word) .. "}"
+end
 
 function get_not_playing(pattern)
   local key_word = k_w(not_playing)
@@ -475,19 +493,11 @@ end
 ------------------
 -- common function
 
-function k_w(word)
-  word = get_value_empty(word)
-  return "{".. string.lower(word) .. "}"
+function print_debug(text)
+  vlc.msg.dbg("[Now Playing texts] " .. tostring(text))
 end
 
-function get_value_empty(value)
-  if value == nil then
-    return ""
-  else
-    return tostring(value)
-  end
-end
-function reverse(t)
+function table_reverse(t)
   local lenght = table.getn(t) + 1
   return function()
     lenght = lenght - 1
@@ -496,8 +506,35 @@ function reverse(t)
     end
   end
 end
+function string_table(text)
+  local tbl = {}
+  local status, _ = pcall(string.gsub, text, ".", function(c) table.insert(tbl, c) end)
+  if status then
+    return tbl
+  else
+    return nil
+  end
+end
+function string_trim(text)
+  local s, e = string.find(text, "^%s+")
+  if e then
+    text = string.sub(text, e+1)
+  end
+  s, e = string.find(text, "%s+$")
+  if s then
+    text = string.sub(text, 1, s-1)
+  end
+  return text
+end
 function truncate(num)
   return tonumber(string.format("%i", num))
+end
+function get_value_empty(value)
+  if value == nil then
+    return ""
+  else
+    return tostring(value)
+  end
 end
 
 function get_filename(name)

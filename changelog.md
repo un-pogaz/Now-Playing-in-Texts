@@ -1,3 +1,7 @@
+### version 2.1
+Fix metadata update error when the file path contain a text betewen bracket ex: [eng]
+Add "ext" and "ext1" tag names for the file extension
+
 ### version 2.0
 Complete rewriting and Custom files
 Thanks to a complete rewrite of the code, "Now Playing in texts" uses a custom pattern feature. You can create hundreds of personalized files, read the HTML doc for more detail.
