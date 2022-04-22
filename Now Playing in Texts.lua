@@ -1,6 +1,7 @@
+VERSION = "2.1"
 function descriptor()
   return { title = "Now Playing in Texts v2",
-    version = "2.1",
+    version = VERSION,
     author = "un_pogaz",
     url = "https://github.com/un-pogaz/Now-Playing-in-Texts",
     description = [[Write the metadatas of the curent playing song in texts files.
@@ -42,7 +43,7 @@ Mac OS X:
 
 -- Activate & Deactivate
 function activate()
-  print_debug("Activate")
+  print_debug("Activate {" .. VERSION .. "}")
   init()
   update_files()
 end
