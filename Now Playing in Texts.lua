@@ -1,4 +1,4 @@
-VERSION = "2.2"
+VERSION = "2.3"
 function descriptor()
   return { title = "Now Playing in Texts v2",
     version = VERSION,
@@ -281,7 +281,7 @@ function write_pattern(name, patterns)
   print_debug("write file > " .. name)
   
   if not metadata[is_playing] then
-    local is_playing_line = get_not_playing(patterns[table.getn(patterns)])
+    local is_playing_line = get_not_playing(patterns[#patterns])
     if is_playing_line then
       print_debug("not playing > " .. is_playing_line)
     else
