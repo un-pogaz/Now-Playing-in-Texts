@@ -215,7 +215,7 @@ function get_metadata()
       local n0 = n .. "0"
       rslt[n] = tostring(rslt[n])
       rslt[n0] = rslt[n]
-      while string.len(rslt[n0]) < 2 do
+      while #rslt[n0] < 2 do
         rslt[n0] = "0" .. rslt[n0]
       end
     end
@@ -325,7 +325,7 @@ function write_pattern(name, patterns)
           for i, rev in table_reverse(index_name) do
             --exctract the end of the patern for replace only the last one metadata
             local fin = string.sub(ptr, rev[1])
-            rslt[i+1] = valide_meta[rev[2]] .. string.sub(fin, string.len(k_w(rev[2]))+1)
+            rslt[i+1] = valide_meta[rev[2]] .. string.sub(fin, #k_w(rev[2])+1)
             ptr = string.sub(ptr, 0, rev[1]-1)
           end
           rslt[1] = ptr
@@ -418,8 +418,8 @@ end
 
 function get_not_playing(pattern)
   local key_word = k_w(not_playing)
-  if (string.len(pattern) >= string.len(key_word)) and (string.sub(string.lower(pattern), 0, string.len(key_word)) == key_word) then
-    return string.sub(pattern, string.len(key_word)+1)
+  if (#pattern >= #key_word) and (string.sub(string.lower(pattern), 0, #key_word) == key_word) then
+    return string.sub(pattern, #key_word+1)
   end
   return nil
 end
