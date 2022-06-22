@@ -1,3 +1,6 @@
+### version 2.3
+Fix unparity of the Lua Libraries betwen Linux and Windows
+
 ### version 2.2
 Fix subtlety/error on Linux
 
