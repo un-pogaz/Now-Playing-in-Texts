@@ -1,4 +1,4 @@
-VERSION = "2.1"
+VERSION = "2.2"
 function descriptor()
   return { title = "Now Playing in Texts v2",
     version = VERSION,
@@ -252,7 +252,7 @@ function get_metadata()
   -- set ext
   if rslt["filename"] then
     local ext = string.reverse(rslt["filename"])
-    local zi = string.find(ext, "\.", 1, true)
+    local zi = string.find(ext, ".", 1, true)
     if zi and zi > 1 then
       ext = string.reverse(string.sub(ext, 1, zi))
       rslt["ext"] = string.upper(ext)
