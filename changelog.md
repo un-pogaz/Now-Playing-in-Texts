@@ -1,3 +1,6 @@
+### version 2.2
+Fix subtlety/error on Linux
+
 ### version 2.1
 Fix metadata update error when the file path contain a text betewen bracket ex: [eng]
 Add "ext" and "ext1" tag names for the file extension
