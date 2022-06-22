@@ -300,7 +300,7 @@ function write_pattern(name, patterns)
     else
       
       local used_name = get_used_name(ptr)
-      local used_name_lenght = table.getn(used_name)
+      local used_name_lenght = #used_name
       
       if used_name_lenght == 0 then
         -- if no valide name, write the text
@@ -484,7 +484,7 @@ function get_custom_patterns(name)
     return lst
   end)
   
-  if not status or table.getn(rslt) == 0 then
+  if not status or #rslt == 0 then
     return name .. "_out", nil
   else
     return name .. "_out", rslt
@@ -499,7 +499,7 @@ function print_debug(text)
 end
 
 function table_reverse(t)
-  local lenght = table.getn(t) + 1
+  local lenght = #t + 1
   return function()
     lenght = lenght - 1
     if 0 < lenght then
