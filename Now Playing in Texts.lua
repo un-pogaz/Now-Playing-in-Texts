@@ -1,4 +1,4 @@
-VERSION = "2.3"
+VERSION = "2.4"
 function descriptor()
   return { title = "Now Playing in Texts v2",
     version = VERSION,
@@ -67,7 +67,7 @@ end
 ----------------
 -- global values
 
-names = { "filename", "title", "artist", "album",
+names = { "filename", "filename1", "title", "artist", "album",
     "genre", "date", "description",
     "COMPOSER", "ALBUMARTIST",
     "now_playing",
@@ -249,12 +249,14 @@ function get_metadata()
   
   
   -- custom names
-  -- set ext
+  -- set ext, filename1
   if rslt["filename"] then
     local ext = string.reverse(rslt["filename"])
     local zi = string.find(ext, ".", 1, true)
     if zi and zi > 1 then
+      rslt["filename1"] = string.reverse(string.sub(ext, zi+1))
       ext = string.reverse(string.sub(ext, 1, zi))
+      
       rslt["ext"] = string.upper(ext)
       rslt["ext1"] = string.lower(ext)
     end

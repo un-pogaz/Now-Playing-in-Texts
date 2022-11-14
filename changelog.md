@@ -1,3 +1,6 @@
+### version 2.4
+Add "filename1" tag name for the file, without extension
+
 ### version 2.3
 Fix unparity of the Lua Libraries betwen Linux and Windows
 
