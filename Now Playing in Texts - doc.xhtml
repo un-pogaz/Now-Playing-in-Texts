@@ -156,12 +156,12 @@ Each one of its patterns is a string containing keywords between braces <b>{ }<
 {artist} - {title}
 404 Not Found : Unknow {type}
 {name} / {filename}</pre>
-<p>In this example, after testing <b class="pattern">{artist} - {album} - {title}</b>, then <b class="pattern">{artist} - {title}</b>, <i>Now Playing in Texts</i> will arrive at the 3rd line with the pattern <b class="pattern">Unknow {type}</b>. As this last pattern does not contain any valid keyword, it will be written as is in <code>np_custom5_out.txt</code> and the pattern 4 <b class="pattern">{name} / {filename}</b> ne sera jamais utilisé.</p>
+<p>In this example, after testing <b class="pattern">{artist} - {album} - {title}</b>, then <b class="pattern">{artist} - {title}</b>, <i>Now Playing in Texts</i> will arrive at the 3rd line with the pattern <b class="pattern">Unknow {type}</b>. As this last pattern does not contain any valid keyword, it will be written as is in <code>np_custom5_out.txt</code> and the pattern 4 <b class="pattern">{name} / {filename}</b> will never be used.</p>
 <blockquote><p>404 Not Found : Unknow {type}</p>
 </blockquote>
 <p><br/></p>
-<p>Il est aussi possible d’avoir des retours a la ligne dans le fichier de "sortie". Pour cela vous devait utiliser le caractère d’échappement "\n" dans le pattern.<br/>
-Par exemple le pattern <b class="pattern">{title}\n{artist}\n{genre}</b> donnera le résultat suivant :</p>
+<p>It is also possible to have line breaks in the "output" file. For this you should use the escape character "\n" in the pattern.<br/>
+For example the pattern <b class="pattern">{title}\n{artist}\n{genre}</b> will give the following result:</p>
 <blockquote>
 <p>Lex<br/>
 Ratatat<br/>
@@ -210,11 +210,11 @@ It is also possible that the metadata is badly read by VLC. Example: if <b>{comp
 <p>By default, when no music is played in VLC, or if it is closed, the custom files will be empty. It is however possible, thanks to a special pattern, to display a specific text when no music is played by VLC.</p>
 <p>Be careful not to confuse "no music played" (STOP button) with "pausing playback" (PAUSE button). The <b>{NOT_PLAYING}</b> pattern only concerns the first case, in the case of a pause of the current reading, the metadata will not be modified.</p>
 <p>To create a <b>{NOT_PLAYING}</b> pattern, you should add at the end of your custom file a new line starting with the keyword <b>{NOT_PLAYING}</b>. The text following this keyword will be the one written in the output file. Other keywords will not be processed.</p>
-<p>In the following example, the text that will be used is « VLC fait une sieste ».</p>
+<p>In the following example, the text that will be used is "VLC takes a nap".</p>
 <pre>{artist} - {title} | {composer}
 {artist} - {title}
 {title}
-{NOT_PLAYING}VLC fait une sieste</pre>
+{NOT_PLAYING}VLC takes a nap</pre>
 <p>If the keyword <b>{NOT_PLAYING}</b> is put at the beginning of another pattern than the one at the last line of the custom file, the line will be ignored. And if the keyword is not at the beginning of the last line, then the line will be considered as a normal pattern and not as a <b>{NOT_PLAYING}</b> pattern. Although it is at the end of the file, the <b>{NOT_PLAYING}</b> pattern will only be used if no music is active and will be ignored from the normal behavior if <i>Now Playing in Texts</i> finds no valid pattern and reaches the end of the file.</p>
 <h3 id="patterns-of-Basic-file-examples">Patterns of Basic file (examples)</h3>
 <p>np_title.txt :</p>
