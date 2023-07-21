@@ -30,7 +30,7 @@ Mac OS X: /Users/%your_name%/Library/Application Support/org.videolan.vlc/
 -------------------------
 Installation Instructions
 
-Place the "Now Playing in Texts.lua" file in the corresponding folder and restart VLC or reload plugin extensions.
+Place the "Now Playing in Texts.lua" file in the corresponding folder and restart VLC or reload plugin extensions. Then, go to the "View" section of the menu bar and click on "Now Playing in Texts v2". If a check mark appear to the side of the entry, this means that the plugin is active.
 
 Linux:
 Current User: ~/.local/share/vlc/lua/extensions/

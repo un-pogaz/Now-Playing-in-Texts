@@ -24,7 +24,7 @@ Now Playing in Texts, extension for VLC media player
 Installation Instructions
 -------------------------
 
-Place this file in the corresponding folder and restart VLC or reload plugin extensions.
+Place this file in the corresponding folder and restart VLC or reload plugin extensions. Then, go to the "View" section of the menu bar and click on "Now Playing in Texts v2". If a check mark appear to the side of the entry, this means that the plugin is active.
 
 Linux:
   Current User: ~/.local/share/vlc/lua/extensions/
