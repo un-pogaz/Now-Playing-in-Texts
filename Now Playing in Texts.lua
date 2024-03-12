@@ -162,7 +162,7 @@ function get_metadata()
   local item = vlc.input.item()
   local metas = item:metas()
   
-  --debug_metadata(metas)
+  --write_debug_metadata(metas)
   
   for i, n in pairs(names) do
     rslt[n] = metas[n]
@@ -399,14 +399,14 @@ function write_artwork()
   fi_w:close()
 end
 
-function debug_metadata(metas)
+function write_debug_metadata(metas)
   local rslt = {}
   for k, v in pairs(metas) do
     table.insert(rslt, k.."=")
     table.insert(rslt, "\t"..v)
   end
-  print_debug("write file > debug_metadata")
-  write_file("debug_metadata", table.concat(rslt, "\n"))
+  print_debug("write file > metadata_debug")
+  write_file("metadata_debug", table.concat(rslt, "\n"))
 end
 
 -------------------
