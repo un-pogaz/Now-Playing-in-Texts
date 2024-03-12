@@ -302,22 +302,22 @@ function write_pattern(name, patterns)
     else
       
       local used_name = get_used_name(ptr)
-      local used_name_lenght = #used_name
+      local used_name_length = #used_name
       
-      if used_name_lenght == 0 then
-        -- if no valide name, write the text
+      if used_name_length == 0 then
+        -- if no valid name, write the text
         print_debug("pattern > " .. ptr)
         write_file(name, ptr)
         return
         
       else
-        local valide_meta = get_valide_meta(used_name)
-        local valide_meta_lenght = 0
-        for w, v in pairs(valide_meta) do
-          valide_meta_lenght = valide_meta_lenght +1
+        local valid_meta = get_valid_meta(used_name)
+        local valid_meta_length = 0
+        for w, v in pairs(valid_meta) do
+          valid_meta_length = valid_meta_length +1
         end
         
-        if used_name_lenght ~= valide_meta_lenght then
+        if used_name_length ~= valid_meta_length then
           -- next pattern
         else
           
@@ -327,7 +327,7 @@ function write_pattern(name, patterns)
           for i, rev in table_reverse(index_name) do
             --exctract the end of the patern for replace only the last one metadata
             local fin = string.sub(ptr, rev[1])
-            rslt[i+1] = valide_meta[rev[2]] .. string.sub(fin, #k_w(rev[2])+1)
+            rslt[i+1] = valid_meta[rev[2]] .. string.sub(fin, #k_w(rev[2])+1)
             ptr = string.sub(ptr, 0, rev[1]-1)
           end
           rslt[1] = ptr
@@ -435,7 +435,7 @@ function get_used_name(pattern)
   end
   return rslt
 end
-function get_valide_meta(used_name)
+function get_valid_meta(used_name)
   local rslt = {}
   for i, n in ipairs(used_name) do
     rslt[n] = metadata[n]
@@ -501,11 +501,11 @@ function print_debug(text)
 end
 
 function table_reverse(t)
-  local lenght = #t + 1
+  local length = #t + 1
   return function()
-    lenght = lenght - 1
-    if 0 < lenght then
-      return lenght, t[lenght]
+    length = length - 1
+    if 0 < length then
+      return length, t[length]
     end
   end
 end
