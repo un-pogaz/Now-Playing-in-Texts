@@ -82,6 +82,16 @@ path = { ["uri"]="filepath", ["artwork_url"]="artwork" }
 not_playing = "NOT_PLAYING"
 
 default_file = {}
+
+default_file["title"] = {"{title}", "{filename}"}
+default_file["artist"] = {"{artist}"}
+default_file["album"] = {"{album}"}
+default_file["artist_title"] = {"{artist} - {title}", "{title}", "{filename}"}
+
+default_file["radio"] = {"{now_playing}", "{title}", "{filename}"}
+default_file["bandcamp"] = {"{artist} - {album} - {track_number0} {title}", "{artist} - {album} - {title}", "{artist} - {title}", "{title}", "{filename}"}
+
+
 metadata = {}
 is_playing = "is_playing_bool"
 
@@ -103,17 +113,6 @@ function init()
   table.sort(names)
   
   metadata = {}
-  
-  default_file = {}
-  
-  default_file["title"] = {"{title}", "{filename}"}
-  default_file["artist"] = {"{artist}"}
-  default_file["album"] = {"{album}"}
-  default_file["artist_title"] = {"{artist} - {title}", "{title}", "{filename}"}
-  
-  default_file["radio"] = {"{now_playing}", "{title}", "{filename}"}
-  default_file["bandcamp"] = {"{artist} - {album} - {track_number0} {title}", "{artist} - {album} - {title}", "{artist} - {title}", "{title}", "{filename}"}
-  
 end
 
 ---------------
