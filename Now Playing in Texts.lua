@@ -1,4 +1,4 @@
-VERSION = "2.4"
+VERSION = "2.5"
 function descriptor()
   return { title = "Now Playing in Texts v2",
     version = VERSION,
@@ -178,10 +178,10 @@ function get_metadata()
   
   -- set duration
   if t_s then
-    t_s = truncate(t_s)
+    t_s = math.floor(t_s)
     if t_s > 0 then
-      t_m = truncate(t_s / 60)
-      t_h = truncate(t_m / 60)
+      t_m = math.floor(t_s / 60)
+      t_h = math.floor(t_m / 60)
       t_s = t_s - t_m * 60
       t_m = t_m - t_h * 60
     end
@@ -527,9 +527,6 @@ function string_trim(text)
     text = string.sub(text, 1, s-1)
   end
   return text
-end
-function truncate(num)
-  return tonumber(string.format("%i", num))
 end
 function get_value_empty(value)
   if value == nil then
