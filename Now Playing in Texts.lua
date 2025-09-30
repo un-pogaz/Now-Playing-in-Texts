@@ -1,4 +1,4 @@
-VERSION = "2.5"
+VERSION = "2.6"
 function descriptor()
   return { title = "Now Playing in Texts v2",
     version = VERSION,
@@ -56,11 +56,22 @@ function deactivate()
   print_debug("Deactivate")
 end
 
+time_last_update = 0
+
 -- Triggers
 function input_changed()
+  time_last_update = 0
   update_files()
 end
 function meta_changed()
+  local time = get_track_time()
+  if (time == time_last_update) then
+    return
+  end
+  if (time > time_last_update) and (time - 0.1 < time_last_update) then
+    return
+  end
+  time_last_update = time
   update_files()
 end
 
@@ -550,6 +561,15 @@ function write_file(name, text)
   if w then
     w:write(text)
     w:close()
+  end
+end
+
+function get_track_time()
+  rlst = vlc.var.get(vlc.object.input(), "time")
+  if type(rlst) == "number" then
+    return rlst / 1000000 -- convert to seconds
+  else
+    return 0
   end
 end
 
