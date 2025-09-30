@@ -72,7 +72,7 @@ names = { "filename", "filename1", "title", "artist", "album",
     "COMPOSER", "ALBUMARTIST",
     "now_playing",
     "name", "duration", "duration_1" }
-    
+
 names_custom = { "ext", "ext1" } -- custom names
 
 names0 = { "track_number", "track_total", "DISCNUMBER" } -- this names exist wiht a 0 variante
@@ -93,7 +93,7 @@ default_file["bandcamp"] = {"{artist} - {album} - {track_number0} {title}", "{ar
 
 
 metadata = {}
-is_playing = "is_playing_bool"
+is_playing = "is_playing"
 
 -- initialisation
 function init()
