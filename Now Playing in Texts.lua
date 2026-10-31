@@ -1,6 +1,6 @@
-VERSION = "2.6"
+VERSION = "3.0"
 function descriptor()
-  return { title = "Now Playing in Texts v2",
+  return { title = "Now Playing in Texts v3",
     version = VERSION,
     author = "un_pogaz",
     url = "https://github.com/un-pogaz/Now-Playing-in-Texts",
@@ -102,6 +102,11 @@ default_file["artist_title"] = {"{artist} - {title}", "{title}", "{filename}"}
 default_file["radio"] = {"{now_playing}", "{title}", "{filename}"}
 default_file["bandcamp"] = {"{artist} - {album} - {track_number0} {title}", "{artist} - {album} - {title}", "{artist} - {title}", "{title}", "{filename}"}
 
+settings = {}
+s_artwork = "artwork"
+s_debug = "debug"
+settings[s_artwork] = false
+settings[s_debug] = false
 
 metadata = {}
 is_playing = "is_playing"
@@ -141,6 +146,7 @@ function clear_files()
 end
 
 function write_all_files()
+  read_settings()
   
   for k, v in pairs(default_file) do
     write_pattern(k, v)
@@ -154,8 +160,7 @@ function write_all_files()
     end
   end
   
-  write_metadata()
-  
+  write_metadata_full()
   write_artwork()
   
 end
@@ -173,7 +178,7 @@ function get_metadata()
   local item = vlc.input.item()
   local metas = item:metas()
   
-  --write_debug_metadata(metas)
+  write_metadata_debug(metas)
   
   for i, n in pairs(names) do
     rslt[n] = metas[n]
@@ -353,7 +358,15 @@ function write_pattern(name, patterns)
   write_file(name, "")
 end
 
-function write_metadata()
+function write_metadata_full()
+  local name1 = "metadata"
+  local name2 = "metadata_full"
+  if not settings[s_debug] then
+    os.remove(get_filename(name1))
+    os.remove(get_filename(name2))
+    return
+  end
+  
   local mdt1 = {}
   local mdt2 = {}
   local m = "";
@@ -376,14 +389,19 @@ function write_metadata()
     table.insert(mdt2, not_playing)
   end
   
-  print_debug("write file > metadata")
-  write_file("metadata", table.concat(mdt1, "\n"))
-  print_debug("write file > metadata_full")
-  write_file("metadata_full", table.concat(mdt2, "\n"))
+  print_debug("write file > " .. name1)
+  write_file(name1, table.concat(mdt1, "\n"))
+  print_debug("write file > " .. name2)
+  write_file(name2, table.concat(mdt2, "\n"))
 end
 
 function write_artwork()
-  local artwork = vlc.config.userdatadir() .. "/np_artwork.jpg"
+  local artwork = output_folder .. "/np_artwork.jpg"
+  if not settings[s_artwork] then
+    os.remove(artwork)
+    return
+  end
+  
   local src = metadata["artwork"]
   if metadata[is_playing] and src then
     local fi_r = io.open(src, "rb")
@@ -409,14 +427,20 @@ function write_artwork()
   fi_w:close()
 end
 
-function write_debug_metadata(metas)
+function write_metadata_debug(metas)
+  local name = "metadata_debug"
+  if not settings[s_debug] then
+    os.remove(get_filename(name))
+    return 
+  end
+  
   local rslt = {}
   for k, v in pairs(metas) do
     table.insert(rslt, k.."=")
     table.insert(rslt, "\t"..v)
   end
-  print_debug("write file > metadata_debug")
-  write_file("metadata_debug", table.concat(rslt, "\n"))
+  print_debug("write file > " .. name)
+  write_file(name, table.concat(rslt, "\n"))
 end
 
 -------------------
@@ -485,20 +509,53 @@ function get_custom_files()
   end
 end
 function get_custom_patterns(name)
-  local rslt = {}
-  
-  local status, rslt = pcall(function()
-    local lst = {}
-    for line in io.lines(get_filename(name)) do
-      table.insert(lst, line)
-    end
-    return lst
-  end)
-  
-  if not status or #rslt == 0 then
+  local rslt = read_file(name)
+  if not rslt or #rslt == 0 then
     return name .. "_out", nil
   else
     return name .. "_out", rslt
+  end
+end
+
+function read_settings()
+  local dic = {}
+  local lst = read_file("settings")
+  if not lst or #lst == 0 then
+    lst = {}
+  end
+  for i, line in ipairs(lst) do
+    line = string_trim(line)
+    local eq = string.find(line, "=")
+    if type(eq) == "number" then
+        local name = string_trim(string.sub(line, 1, eq-1))
+        local value = toboolean(string.sub(line, eq+1))
+        dic[name] = value
+    end
+  end
+  
+  local to_write = false
+  for k, v in pairs(settings) do
+    local nv = dic[k]
+    if nv == nil then
+        if v == true then
+          v = '1'
+        end
+        if v == false then
+          v = '0'
+        end
+        table.insert(lst, k .. "=" .. tostring(v))
+        to_write = true
+    else
+        settings[k] = nv
+    end
+  end
+  if not to_write then
+    return
+  end
+  local w = io.open(get_filename("settings"), "w")
+  if w then
+    w:write(table.concat(lst, "\n"))
+    w:close()
   end
 end
 
@@ -563,6 +620,21 @@ function write_file(name, text)
   end
 end
 
+function read_file(name)
+  local status, rslt = pcall(function()
+    local lst = {}
+    for line in io.lines(get_filename(name)) do
+      table.insert(lst, line)
+    end
+    return lst
+  end)
+  if not status or #rslt == 0 then
+    return {}
+  else
+    return rslt
+  end
+end
+
 function get_track_time()
   local rlst = vlc.var.get(vlc.object.input(), "time")
   if type(rlst) == "number" then
@@ -570,6 +642,17 @@ function get_track_time()
   else
     return 0
   end
+end
+
+function toboolean(value)
+    if value == nil then
+        return false
+    end
+    value = string_trim(string.lower(tostring(value)))
+    if value == "1" or value == "true" then
+        return true
+    end
+    return false
 end
 
 ----------

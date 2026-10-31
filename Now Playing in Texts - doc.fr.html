@@ -95,7 +95,7 @@ li {line-height: 1.2; margin: 0.33em 0;}
 <p>Une extension VLC media player (v2 et v3) pour sauvegarder dans des fichiers TXTs les métadonnées de la musique actuellement jouer.<br/>
 Idéal si vous souhaitez afficher la musique en cours sur votre flux dans votre logiciel de streaming (OBS Studio...).</p>
 <h2 id="installation-instructions">Installation Instructions</h2>
-<p>Placez le fichier "Now Playing in Texts.lua" dans le dossier correspondant et redémarrez VLC ou rechargez les extensions des plugins. Ensuite, allez dans la section "Vue" de la barre de menu et cliquez sur "Now Playing in Texts v2". Si une coche apparaît sut le côté de l'entrée, cela signifie que le plugin est actif.</p>
+<p>Placez le fichier "Now Playing in Texts.lua" dans le dossier correspondant et redémarrez VLC ou rechargez les extensions des plugins. Ensuite, allez dans la section "Vue" de la barre de menu et cliquez sur "Now Playing in Texts v3". Si une coche apparaît sut le côté de l'entrée, cela signifie que le plugin est actif.</p>
 <p class="left">Linux:<br/>
   Current User: <code>~/.local/share/vlc/lua/extensions/</code><br/>
   All Users: <code>/usr/lib/vlc/lua/extensions/</code></p>
@@ -105,10 +105,10 @@ Idéal si vous souhaitez afficher la musique en cours sur votre flux dans votre 
 <p class="left">Mac OS X:<br/>
   Current User: <code>/Users/%your_name%/Library/Application Support/org.videolan.vlc/lua/extensions/</code><br/>
   All Users: <code>/Applications/VLC.app/Contents/MacOS/share/lua/extensions/</code></p>
-<p is="http://www.w3.org/1999/xhtml" id="fonctionnement-et-objectif">Fonctionnement</p>
+<p id="fonctionnement-et-objectif">Fonctionnement</p>
 <p><i>Now Playing in Texts</i> lit et sauvegardera dans des fichiers TXTs les métadonnées de la musique actuellement jouer dans VLC, dans l’objectif de récupérer leurs contenus via un autre logiciel, par exemple avec OBS Studio pour les ajoutés dans votre flux de streaming.</p>
 <p><i>Now Playing in Texts</i> gérera automatique une liste de fichiers par défaut, mais il est aussi possible de créés des fichiers personnaliser.</p>
-<p>Les fichiers TXTs seront enregistrés dans le répertoire de l'utilisateur VLC qui se trouve dans les dossiers suivant :<br/>
+<p>Les fichiers TXTs seront enregistrés dans le dossier utilisateur VLC qui se trouve dans les dossiers suivant :<br/>
   Linux: <code>~/.local/share/vlc/</code><br/>
   Windows: <code>%APPDATA%\vlc\</code><br/>
   Mac OS X: <code>/Users/%your_name%/Library/Application Support/org.videolan.vlc/</code></p>
@@ -119,15 +119,23 @@ Idéal si vous souhaitez afficher la musique en cours sur votre flux dans votre 
 <p><code>np_album.txt</code> : contiens l’album de la musique. Si la musique n’a pas d’album, le fichier sera vide.</p>
 <p><code>np_artist_title.txt</code> : contiens l’artiste et le titre de la musique. Si la musique n’a pas d’artiste ou n’a pas de titre, se comportera comme <code>np_title.txt</code>.</p>
 <p><code>np_radio.txt</code> : Utilise la métadonnée <b>{now_playing}</b>, sinon, se comporte comme <code>np_title.txt</code>. Cette métadonnée est parfois utilisée par les web radio, il est donc plus pertinent d’utilisé ce fichier si vous en écouté une.</p>
-<p><code>np_bandcamp.txt</code> : Utilise le pattern de métadonnée du site Bandcamp qui est <b class="pattern">{artist} - {album} - {track_number0} {title}</b> sinon, se comporte comme <code>np_artist_title.txt</code>. </p>
-<h2 id="fichiers-speciaux">Fichiers spéciaux</h2>
-<p>Les 3 fichiers spéciaux sont générés automatiquement et contienne des métadonnées uniques ou des fichiers utile au débogage.<br/></p>
-<p><code>np_metadata.txt</code> : contiens la liste des métadonnées disponible pour le morceau actuel.<br/></p>
-<p><code>np_metadata_full.txt</code> : contiens la liste de toutes les métadonnées utilisable dans <i>Now Playing in Texts</i>, y compris les vides.</p>
-<p><code>np_artwork.jpg</code> : copier de l’image de couverture de la musique. Si aucune image n’est trouvée, une image vide/transparent sera crée.<br/></p>
-
+<p><code>np_bandcamp.txt</code> : Utilise le pattern de métadonnée du site Bandcamp qui est <b class="pattern">{artist} - {album} - {track_number0} {title}</b> sinon, se comporte comme <code>np_artist_title.txt</code>.</p>
+<h2 id="fichiers-speciaux">Fichier d'option</h2>
+<p>À l’intérieur du dossier utilisateur VLC, vous trouverait aussi le fichier <code>np_settings.txt</code>. Ce fichier permet d’activer et de désactiver certaines options de <i>Now Playing in Texts</i>. Le contenu par défauts est le suivant :</p>
+<pre>artwork=0
+debug=0</pre>
+<p>Chaque ligne représente une option, à gauche du signe égale se trouve son nom, a droite sa valeur que vous pouvait modifier. La valeur 0 spécifie que l’option est désactivée, une valeur de 1 la rend active.</p>
+<p>Les options possibles sont les suivantes :</p>
+<p><code>artwork</code> : permet la création du fichier <code>np_artwork.jpg</code> qui copier de l’image de couverture de la musique. Si aucune image n’est trouvée, une image vide/transparent sera crée.</p>
+<p><code>debug</code> : permet la création des 3 fichiers de débogage suivants :</p>
+<ul>
+<li><code>np_metadata.txt</code> : contiens la liste des métadonnées disponible pour le morceau actuel.</li>
+<li><code>np_metadata_full.txt</code> : contiens la liste de toutes les métadonnées utilisable dans <i>Now Playing in Texts</i>, y compris les vides.</li>
+<li><code>np_metadata_debug.txt</code> : contiens les métadonnées brutes du morceau actuel, tel que lue par VLC.</li>
+</ul>
+<p>Ses deux options peuvent étre modifier alors que <i>Now Playing in Texts</i> est actif, et seront utilisé au prochain cycle de création de fichiers après que la musique en cours est changée. Noté que si ses options sont désactivées, les fichiers qui leur sont lié seront supprimées.</p>
 <h2 id="fichiers-personnaliser">Fichiers personnaliser</h2>
-<p><i>Now Playing in Texts V2</i> intègre la possibilité des créés ses propres fichiers TXTs de métadonnées avec des patterns personnalisés.</p>
+<p><i>Now Playing in Texts</i> intègre la possibilité des créés ses propres fichiers TXTs de métadonnées avec des patterns personnalisés.</p>
 <p>Pour obtenir les métadonnées que vous souhaiter, vous devrait créer un fichier .TXT "d’entrée" nommée <code>np_custom.txt</code> qui sera analysé et les métadonnées demandées seront écrites dans un fichier de "sortie" <code>np_custom_out.txt</code>.<br/>
 Il est possible d’avoirs plusieurs fichiers personnaliser, leurs noms sont <code>np_custom.txt</code>,  <code>np_custom1.txt</code>,  <code>np_custom2.txt</code>,  <code>np_custom3.txt</code> … jusqu’à <code>np_custom100.txt</code> !</p>
 <p>Chaque ligne du fichier "d’entrée" correspond a un pattern de métadonnée a récupéré, l’ensemble forme une liste de pattern de métadonnée a testé et a écrire dans le fichier de "sortie" correspondant.<br/>
