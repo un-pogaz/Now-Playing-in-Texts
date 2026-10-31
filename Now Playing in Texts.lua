@@ -351,7 +351,6 @@ function write_pattern(name, patterns)
   
   print_debug("no matching pattern <empty file>")
   write_file(name, "")
-  return
 end
 
 function write_metadata()
@@ -565,7 +564,7 @@ function write_file(name, text)
 end
 
 function get_track_time()
-  rlst = vlc.var.get(vlc.object.input(), "time")
+  local rlst = vlc.var.get(vlc.object.input(), "time")
   if type(rlst) == "number" then
     return rlst / 1000000 -- convert to seconds
   else
