@@ -105,8 +105,12 @@ default_file["bandcamp"] = {"{artist} - {album} - {track_number0} {title}", "{ar
 settings = {}
 s_artwork = "artwork"
 s_debug = "debug"
+s_write_local = "write_local"
 settings[s_artwork] = false
 settings[s_debug] = false
+settings[s_write_local] = false
+
+output_folder = nil
 
 metadata = {}
 is_playing = "is_playing"
@@ -114,6 +118,7 @@ is_playing = "is_playing"
 -- initialisation
 function init()
   print_debug("init()")
+  init_output_folder()
   
   for i, n in pairs(names_custom) do
     table.insert(names, n)
@@ -156,7 +161,7 @@ function write_all_files()
     if ptr then
       write_pattern(o, ptr)
     else
-      os.remove(get_filename(o))
+      os.remove(get_write_filename(o))
     end
   end
   
@@ -362,8 +367,8 @@ function write_metadata_full()
   local name1 = "metadata"
   local name2 = "metadata_full"
   if not settings[s_debug] then
-    os.remove(get_filename(name1))
-    os.remove(get_filename(name2))
+    os.remove(get_write_filename(name1))
+    os.remove(get_write_filename(name2))
     return
   end
   
@@ -430,7 +435,7 @@ end
 function write_metadata_debug(metas)
   local name = "metadata_debug"
   if not settings[s_debug] then
-    os.remove(get_filename(name))
+    os.remove(get_write_filename(name))
     return 
   end
   
@@ -509,7 +514,7 @@ function get_custom_files()
   end
 end
 function get_custom_patterns(name)
-  local rslt = read_file(name)
+  local rslt = read_local_file(name)
   if not rslt or #rslt == 0 then
     return name .. "_out", nil
   else
@@ -519,7 +524,7 @@ end
 
 function read_settings()
   local dic = {}
-  local lst = read_file("settings")
+  local lst = read_local_file("settings")
   if not lst or #lst == 0 then
     lst = {}
   end
@@ -552,11 +557,48 @@ function read_settings()
   if not to_write then
     return
   end
-  local w = io.open(get_filename("settings"), "w")
+  local w = io.open(get_local_filename("settings"), "w")
   if w then
     w:write(table.concat(lst, "\n"))
     w:close()
   end
+end
+
+function init_output_folder()
+    read_settings()
+    if settings[s_write_local] then
+        output_folder = vlc.config.userdatadir()
+        return
+    end
+    
+    local function test(folder)
+        local filename = folder .. "/np_TMP.txt"
+        local w = io.open(filename, "w")
+        if w then
+            w:write('TMP')
+            w:close()
+            os.remove(filename)
+            return true
+        end
+        os.remove(filename)
+        return false
+    end
+    local lst = {
+        '/dev/shm',
+        '/tmp',
+        'C:/Windows/Temp',
+    }
+    local status, rslt = false, nil
+    for i, folder in ipairs(lst) do
+        if not status then
+            status, rslt = pcall(test, folder)
+            if status and rslt then
+                output_folder = folder
+                return
+            end
+        end
+    end
+    output_folder = vlc.config.userdatadir()
 end
 
 ------------------
@@ -603,7 +645,10 @@ function get_value_empty(value)
   end
 end
 
-function get_filename(name)
+function get_write_filename(name)
+  return output_folder .. "/np_" .. get_value_empty(name) .. ".txt"
+end
+function get_local_filename(name)
   return vlc.config.userdatadir() .. "/np_" .. get_value_empty(name) .. ".txt"
 end
 
@@ -613,17 +658,17 @@ function write_file(name, text)
     text = " "
   end
   text = string.gsub(tostring(text), "\\n", "\n")
-  local w = io.open(get_filename(name), "w")
+  local w = io.open(get_write_filename(name), "w")
   if w then
     w:write(text)
     w:close()
   end
 end
 
-function read_file(name)
+function read_local_file(name)
   local status, rslt = pcall(function()
     local lst = {}
-    for line in io.lines(get_filename(name)) do
+    for line in io.lines(get_local_filename(name)) do
       table.insert(lst, line)
     end
     return lst
