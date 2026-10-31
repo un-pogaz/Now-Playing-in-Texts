@@ -533,8 +533,10 @@ function read_settings()
     local eq = string.find(line, "=")
     if type(eq) == "number" then
         local name = string_trim(string.sub(line, 1, eq-1))
-        local value = toboolean(string.sub(line, eq+1))
-        dic[name] = value
+        local value = settings[name]
+        if value ~= nil then
+          dic[name] = toboolean(string.sub(line, eq+1))
+        end
     end
   end
   
