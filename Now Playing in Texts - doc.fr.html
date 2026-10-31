@@ -94,7 +94,7 @@ li {line-height: 1.2; margin: 0.33em 0;}
 <h1 id="now-playing-in-texts">Now Playing in Texts</h1>
 <p>Une extension VLC media player (v2 et v3) pour sauvegarder dans des fichiers TXTs les métadonnées de la musique actuellement jouer.<br/>
 Idéal si vous souhaitez afficher la musique en cours sur votre flux dans votre logiciel de streaming (OBS Studio...).</p>
-<h2 id="installation-instructions">Installation Instructions</h2>
+<h2 id="instructions-d'installation">Instructions d’installation</h2>
 <p>Placez le fichier "Now Playing in Texts.lua" dans le dossier correspondant et redémarrez VLC ou rechargez les extensions des plugins. Ensuite, allez dans la section "Vue" de la barre de menu et cliquez sur "Now Playing in Texts v3". Si une coche apparaît sut le côté de l'entrée, cela signifie que le plugin est actif.</p>
 <p class="left">Linux:<br/>
   Current User: <code>~/.local/share/vlc/lua/extensions/</code><br/>
@@ -105,10 +105,10 @@ Idéal si vous souhaitez afficher la musique en cours sur votre flux dans votre 
 <p class="left">Mac OS X:<br/>
   Current User: <code>/Users/%your_name%/Library/Application Support/org.videolan.vlc/lua/extensions/</code><br/>
   All Users: <code>/Applications/VLC.app/Contents/MacOS/share/lua/extensions/</code></p>
-<p id="fonctionnement-et-objectif">Fonctionnement</p>
-<p><i>Now Playing in Texts</i> lit et sauvegardera dans des fichiers TXTs les métadonnées de la musique actuellement jouer dans VLC, dans l’objectif de récupérer leurs contenus via un autre logiciel, par exemple avec OBS Studio pour les ajoutés dans votre flux de streaming.</p>
+<p id="fonctionnement">Fonctionnement</p>
+<p><i>Now Playing in Texts</i> lit et sauvegardera dans des fichiers TXT les métadonnées de la musique actuellement jouer dans VLC, dans l’objectif de récupérer leurs contenus via un autre logiciel, par exemple avec OBS Studio pour les ajoutés dans votre flux de streaming.</p>
 <p><i>Now Playing in Texts</i> gérera automatique une liste de fichiers par défaut, mais il est aussi possible de créés des fichiers personnaliser.</p>
-<p>Les fichiers TXTs seront enregistrés dans le dossier utilisateur VLC qui se trouve dans les dossiers suivant :<br/>
+<p>Les fichiers TXT seront enregistrés dans le dossier utilisateur VLC qui se trouve dans les dossiers suivant :<br/>
   Linux: <code>~/.local/share/vlc/</code><br/>
   Windows: <code>%APPDATA%\vlc\</code><br/>
   Mac OS X: <code>/Users/%your_name%/Library/Application Support/org.videolan.vlc/</code></p>
@@ -120,7 +120,7 @@ Idéal si vous souhaitez afficher la musique en cours sur votre flux dans votre 
 <p><code>np_artist_title.txt</code> : contiens l’artiste et le titre de la musique. Si la musique n’a pas d’artiste ou n’a pas de titre, se comportera comme <code>np_title.txt</code>.</p>
 <p><code>np_radio.txt</code> : Utilise la métadonnée <b>{now_playing}</b>, sinon, se comporte comme <code>np_title.txt</code>. Cette métadonnée est parfois utilisée par les web radio, il est donc plus pertinent d’utilisé ce fichier si vous en écouté une.</p>
 <p><code>np_bandcamp.txt</code> : Utilise le pattern de métadonnée du site Bandcamp qui est <b class="pattern">{artist} - {album} - {track_number0} {title}</b> sinon, se comporte comme <code>np_artist_title.txt</code>.</p>
-<h2 id="fichiers-speciaux">Fichier d'option</h2>
+<h2 id="fichier-d'options">Fichier d'options</h2>
 <p>À l’intérieur du dossier utilisateur VLC, vous trouverait aussi le fichier <code>np_settings.txt</code>. Ce fichier permet d’activer et de désactiver certaines options de <i>Now Playing in Texts</i>. Le contenu par défauts est le suivant :</p>
 <pre>artwork=0
 debug=0</pre>
