@@ -1,3 +1,10 @@
+### version 3.0
+Add a `settings.txt` file to control some behavior of the extension
+**BREAKING CHANGE:** TXT files are now write into the temporary system folders by default. To restore the previous behavior, use the setting `write_local=`
+
+### version 2.6
+Avoid to repeatedly write the files in a too short time
+
 ### version 2.5
 Fix another unparity of the Lua Libraries betwen Linux and Windows
 
