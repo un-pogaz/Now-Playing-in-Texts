@@ -11,18 +11,19 @@ np_artist_title.txt = contains the artist and the title of the music.
 np_radio.txt = this text use a metadata that more relevant if you listen a web radio.
 np_bandcamp.txt = Uses the Bandcamp metadata pattern. 
 
-Special files
-The 3 special files are automatically generated and contain unique metadata or files useful for debugging.
-
-np_metadata.txt = contains the list of metadata available for the current song.
-np_metadata_full.txt = contains a list of all the metadata that can be used in Now Playing in Texts, including those empty.
-np_artwork.jpg = copy the cover image of the music. If no image is found, a blank/transparent image will be created.
-
 Custom files
-Now Playing in Texts V2 integrates the possibility of creating its own metadata TXT files with your custom metadata pattern.
+Now Playing in Texts V3 integrates the possibility of creating its own metadata TXT files with your custom metadata pattern.
 Read the HTML doc for more detail.
 
-The TXTs files will be saved in the VLC user director which can be found in the following directory:
+Settings file
+Allow to enable some special behaviors.
+
+By default, the TXT files will be saved into the temporary system folders:
+Linux: /dev/shm ou /tmp
+Windows: C:\Windows\Temp
+MacOS X: /tmp
+
+Or, depending of the enable settings, in the VLC user director:
 Linux: ~/.local/share/vlc/
 Windows: %APPDATA%\vlc\
 Mac OS X: /Users/%your_name%/Library/Application Support/org.videolan.vlc/
@@ -46,5 +47,5 @@ All Users: /Applications/VLC.app/Contents/MacOS/share/lua/extensions/
 
 =============
 IMPORTANT
-"Now Playing in Texts" V2 is compatible with VLC 3 only.
-If you absolutely must use VLC v2, only "Now Playing in Texts" v1.5 and below are compatible. Go to "Files" tab on this page, click on "3 files ( 24 archived )" and select the old version of your choice.
+"Now Playing in Texts" V3 is compatible with VLC 3 only.
+If you absolutely must use VLC v2, only "Now Playing in Texts" v1.5 and below are compatible. Go to "Releases" and select the old version of your choice.
